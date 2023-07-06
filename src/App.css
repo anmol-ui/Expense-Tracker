@@ -218,19 +218,20 @@ input[type="number"] {
 
 .active{
   z-index: 2;
-  display: block;
+  display: flex;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   transition: 800ms;
   opacity: 1;
   position: fixed;
-  margin-left: 35%;
-  margin-top: 14%;
 }
 .inactive{
   z-index: 2;
   position: fixed;
-  margin-left: 35%;
-  margin-top: 14%;
-  transform: translateY(100px) scale(0) rotateY(180deg);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0) rotateY(180deg);
   transition: 800ms;
   opacity: 0;
 }
