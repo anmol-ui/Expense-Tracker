@@ -20,13 +20,15 @@ function App() {
   const {showLogin,setShowLogin} = UseShowLogin();
   const [user_id,setUser_id] = useState(null);
   const elementRef = useRef(null);
+  const delay = ms => new Promise(res => setTimeout(res, ms));
 
   function addTransactions(){
     //Add transactions while initialization
     axios({
       method : "GET",
+      headers:{ "Access-Control-Allow-Origin": "https://expense-tracker-backend-two.vercel.app/"},
       params : {id: user_id},
-      url: `http://localhost:3001/transactions`
+      url: `https://expense-tracker-backend-two.vercel.app/transactions`
     }).then(res=>{
       // console.log(res.data);
       //add this data to UI
@@ -69,8 +71,9 @@ function App() {
     if(user_id!=null && user_id!==-1){
       axios({
         method : "GET",
+        headers:{ "Access-Control-Allow-Origin": "https://expense-tracker-backend-two.vercel.app/"},
         params : {id: user_id},
-        url: `http://localhost:3001/account`
+        url: `https://expense-tracker-backend-two.vercel.app/account`
       }).then(res=>{
         // console.log(res.data);
         //add this data to UI
@@ -91,10 +94,11 @@ function App() {
   },[user_id,income,expenses,balance,email]);
 
   let handleSubmit = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
+
     try {
       axios.post(
-            "http://localhost:3001/post/",
+            "https://expense-tracker-backend-two.vercel.app/post/",
             { description: desc , amount: amount, user_id: user_id }
         )
         .then((res) => console.log("success, dictionary sent,", res))
@@ -104,11 +108,14 @@ function App() {
     } catch (err) {
       console.log(err);
     }
+    await delay(1000);
+    window.location.reload(true);
     if(user_id!==null && user_id!==-1){
       axios({
         method :"GET",
         params : {id: user_id},
-        url : `http://localhost:3001/account`  
+        headers:{ "Access-Control-Allow-Origin": "https://expense-tracker-backend-two.vercel.app/"},
+        url : `https://expense-tracker-backend-two.vercel.app/account`  
         
       }).then(res=>{
       console.log('got account data',res.data);
@@ -119,7 +126,8 @@ function App() {
       axios({
         method :"GET",
         params : {id: user_id},
-        url : `http://localhost:3001/transactions`  
+        headers:{ "Access-Control-Allow-Origin": "https://expense-tracker-backend-two.vercel.app/"},
+        url : `https://expense-tracker-backend-two.vercel.app/transactions`  
       }).then(res=>{
         setTransactions(res.data);
       }).catch(err=>{
@@ -134,7 +142,7 @@ function App() {
       handleButtonClick();
       try {
         axios.post(
-              "http://localhost:3001/delete/",
+              "https://expense-tracker-backend-two.vercel.app/delete/",
               { id: delID, user_id: user_id}
           )
           .then((res) => console.log("success, delete ID sent,", res))
@@ -147,7 +155,8 @@ function App() {
     }
   }, [delID]);
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async() => {
+    await delay(1000);
     console.log('Button ID:', delID);
     window.location.reload(true);
   };

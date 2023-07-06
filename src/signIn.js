@@ -23,7 +23,7 @@ function SignIn(props){
                     if(username.length>0){
                         try {
                             axios.post(
-                                  "http://localhost:3001/register/",
+                                  "https://expense-tracker-backend-two.vercel.app/register/",
                                   { username: username , email: email, password: password }
                               )
                               .then((res) => props.status[3](res.data.id))
@@ -42,7 +42,7 @@ function SignIn(props){
                 else if(showLogin){
                     try {
                         axios.post(
-                              "http://localhost:3001/verify/",
+                              "https://expense-tracker-backend-two.vercel.app/verify/",
                               { email: email, password: password }
                           )
                           .then((res) => props.status[3](res.data.id))
