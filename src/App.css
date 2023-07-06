@@ -286,6 +286,9 @@ input[type="password"] {
   .MuiGrid-item{
     margin: 0 !important;
   }
+  h1{
+    height: 1.7rem;
+  }
   h1 span{
     float: left;
   }
