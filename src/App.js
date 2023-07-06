@@ -147,22 +147,23 @@ function App() {
   useEffect(() => {
     if (delID !== null) {
       handleButtonClick();
-      try {
-        axios.post(
-              "https://expense-tracker-backend-two.vercel.app/delete/",
-              { id: delID, user_id: user_id}
-          )
-          .then((res) => console.log("success, delete ID sent,", res))
-          .catch((err) => {
-              console.log(err.response);
-          });
-      } catch (err) {
-        console.log(err);
-      }
     }
+
   }, [delID]);
 
   const handleButtonClick = async() => {
+    try {
+      axios.post(
+            "https://expense-tracker-backend-two.vercel.app/delete/",
+            { id: delID, user_id: user_id}
+        )
+        .then((res) => console.log("success, delete ID sent,", res))
+        .catch((err) => {
+            console.log(err.response);
+        });
+    } catch (err) {
+      console.log(err);
+    }
     await delay(1000);
     console.log('Button ID:', delID);
     window.location.reload(true);
@@ -239,7 +240,7 @@ function App() {
         <h3>History</h3>
         <ul id="list" class="list">
           {transactions!=null && transactions.map(function(transaction, i){
-            return <li className={transaction.amount<0 ? 'minus' : 'plus'} key={transaction.id}>{transaction.text} <span>{transaction.amount}</span><button class="delete-btn" onClick={function(e)  { setDelID(transaction.id)}} ><FontAwesomeIcon icon={faTrashCan} /></button></li>;
+            return <li className={transaction.amount<0 ? 'minus' : 'plus'} key={transaction.id}>{transaction.text} <span>{transaction.amount}</span><button class="delete-btn" onClick={function(e)  {e.preventDefault(); setDelID(transaction.id)}} ><FontAwesomeIcon icon={faTrashCan} /></button></li>;
           })}
         </ul>
       </div>
