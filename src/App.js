@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope,faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import SignIn from './signIn';
 import UseShowLogin from './showLogin';
+import TabGroup from './tabGroup';
 
 function App() {
   const [desc, setDesc] = useState("");
@@ -21,6 +22,7 @@ function App() {
   const [user_id,setUser_id] = useState(null);
   const elementRef = useRef(null);
   const delay = ms => new Promise(res => setTimeout(res, ms));
+  const [transactionType,setTransactionType] = useState(1);
 
   function addTransactions(){
     //Add transactions while initialization
@@ -39,6 +41,7 @@ function App() {
   }
 
   useEffect(() => {
+    console.log(transactionType);
     // Update the income,expenses and balance using Account api    
     // if(loginData!=null){
     //   setIncome(loginData.income);
@@ -95,11 +98,15 @@ function App() {
 
   let handleSubmit = async (e) => {
     e.preventDefault();
+    // if(transactionType===-1){
+    //   setAmount(amount*(-1));
+    // }
+    // await delay(1000);
 
     try {
       axios.post(
             "https://expense-tracker-backend-two.vercel.app/post/",
-            { description: desc , amount: amount, user_id: user_id }
+            { description: desc , amount: (amount*transactionType), user_id: user_id }
         )
         .then((res) => console.log("success, dictionary sent,", res))
         .catch((err) => {
@@ -165,11 +172,12 @@ function App() {
     localStorage.clear();
     window.location.reload(true);
   }
+  
 
   return (
     <div className="App">
       <SignIn status={[showLogin,setShowLogin,user_id,setUser_id,elementRef]}></SignIn>
-      <h1><span>Expense Tracker</span><button onClick={handleSignOut} style={{
+      <h1><span>Expense Tracker</span><button className='signout' onClick={handleSignOut} style={{
         display:'flex',
         float:'right',
         marginTop:'0.8%',
@@ -184,7 +192,7 @@ function App() {
 
         <Grid container spacing={10}>
 
-          <Grid item xs={6} style={{marginTop:'10%'}}>
+          <Grid item xs={12} sm={6} style={{marginTop:'12%'}}>
             <div class="header">
             <img src="https://i.ibb.co/jfScDTC/budget.png" alt="Expense Tracker"/>
               <div class="balance-container">
@@ -205,16 +213,17 @@ function App() {
             
           </Grid>
 
-          <Grid item xs={6} style={{marginTop:'10%'}}>
+          <Grid item xs={12} sm={6} style={{marginTop:'3%'}}>
             <h3>Add new transaction</h3>
             <form id="form" onSubmit={handleSubmit}>
+              <label>Transaction type</label>
+              <TabGroup type={[transactionType,setTransactionType]}></TabGroup>
               <div class="form-control">
                 <label for="text">Description</label>
                 <input type="text" value={desc} id="text" onChange={(e) => setDesc(e.target.value)} placeholder="Enter description..." />
               </div>
               <div class="form-control">
                 <label for="amount">Amount <br/>
-                  <small>(-100 = expense, 100 = income)</small>
                 </label>
                 <input type="number" value={amount} id="amount" onChange={(e) => setAmount(e.target.value)} placeholder="Enter amount..." />
               </div>

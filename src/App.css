@@ -278,3 +278,29 @@ input[type="password"] {
 .active input[type="submit"]:hover {
   background: #6cf0c2;
 }
+
+
+@media (max-width: 600px) {
+  /* CSS rules for small screens */
+  .MuiGrid-item{
+    margin: 0 !important;
+  }
+  h1 span{
+    float: left;
+  }
+}
+@media (max-width: 570px) {
+  /* CSS rules for small screens */
+  .signout{
+    margin-top: 2.4% !important;
+  }
+  .delete-btn{
+    opacity: 1;
+  }
+}
+@media (max-width: 400px) {
+  /* CSS rules for small screens */
+  h1 span{
+    font-size: 1.8rem;
+  }
+}
