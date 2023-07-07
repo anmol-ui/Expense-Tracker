@@ -7,6 +7,7 @@ import { faEnvelope,faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import SignIn from './signIn';
 import UseShowLogin from './showLogin';
 import TabGroup from './tabGroup';
+import List from './history';
 
 function App() {
   const [desc, setDesc] = useState("");
@@ -16,6 +17,7 @@ function App() {
   const [balance,setBalance] = useState(null);
   const [email,setEmail] = useState(null);
   const [password,setPassword] = useState(null);
+  const [username,setUsername] = useState(null);
   const [transactions,setTransactions] = useState(null);
   const [delID,setDelID] = useState(null);
   const {showLogin,setShowLogin} = UseShowLogin();
@@ -86,6 +88,7 @@ function App() {
           setBalance(res.data.balance);
           setEmail(res.data.email);
           setPassword(res.data.password);
+          setUsername(res.data.name);
         }
         // setTransactions(res.data);
       }).catch(err=>{
@@ -102,7 +105,6 @@ function App() {
     //   setAmount(amount*(-1));
     // }
     // await delay(1000);
-
     try {
       axios.post(
             "https://expense-tracker-backend-two.vercel.app/post/",
@@ -115,7 +117,7 @@ function App() {
     } catch (err) {
       console.log(err);
     }
-    await delay(1000);
+    await delay(1600);
     window.location.reload(true);
     if(user_id!==null && user_id!==-1){
       axios({
@@ -193,7 +195,8 @@ function App() {
 
         <Grid container spacing={10}>
 
-          <Grid item xs={12} sm={6} style={{marginTop:'12%'}}>
+          <Grid item xs={12} sm={6} style={{marginTop:'2%'}}>
+            <h1 style={{marginBottom:"20%"}}>Welcome, {username} !</h1>
             <div class="header">
             <img src="https://i.ibb.co/jfScDTC/budget.png" alt="Expense Tracker"/>
               <div class="balance-container">
@@ -238,11 +241,7 @@ function App() {
       
       <div className= {showLogin?'no-history':'history'}>
         <h3>History</h3>
-        <ul id="list" class="list">
-          {transactions!=null && transactions.map(function(transaction, i){
-            return <li className={transaction.amount<0 ? 'minus' : 'plus'} key={transaction.id}>{transaction.text} <span>{transaction.amount}</span><button class="delete-btn" onClick={function(e)  {e.preventDefault(); setDelID(transaction.id)}} ><FontAwesomeIcon icon={faTrashCan} /></button></li>;
-          })}
-        </ul>
+        <List items={[transactions,setTransactions,delID,setDelID]}></List>
       </div>
 
       <div class="notification-container" id="notification">

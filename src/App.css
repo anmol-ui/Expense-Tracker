@@ -292,6 +292,9 @@ input[type="password"] {
   h1 span{
     float: left;
   }
+  ul#list{
+    margin-right: 2.5rem;
+  }
 }
 @media (max-width: 570px) {
   /* CSS rules for small screens */
@@ -301,10 +304,31 @@ input[type="password"] {
   .delete-btn{
     opacity: 1;
   }
+  .MuiGrid-item h1{
+    font-size: 183%;
+  }
+}
+@media (max-width: 490px) {
+  .MuiGrid-item h1{
+    font-size: 174%;
+  }
+}
+@media (max-width: 450px) {
+  .MuiGrid-item h1{
+    font-size: 162%;
+  }
+}
+@media (max-width: 425px) {
+  .MuiGrid-item h1{
+    font-size: 152%;
+  }
 }
 @media (max-width: 400px) {
   /* CSS rules for small screens */
   h1 span{
     font-size: 1.8rem;
+  }
+  .MuiGrid-item h1{
+    font-size: 139%;
   }
 }
