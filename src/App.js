@@ -10,6 +10,7 @@ import TabGroup from './tabGroup';
 import List from './history';
 import Loader from './components/loader';
 
+
 function App() {
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState("");
@@ -29,6 +30,14 @@ function App() {
   const [newUser,setNewUser] = useState(false);
 
 
+  function handleNavbar(){
+    let bar = document.querySelector('.bars'), navItem = document.querySelector('.nav-items');
+    if(bar!==null){
+      bar.addEventListener('click', () => {
+          navItem.classList.toggle('nactive');
+      });
+    }
+  }
   function addTransactions(){
     //Add transactions while initialization
     axios({
@@ -209,23 +218,32 @@ function App() {
         <Loader></Loader> //loader set
       ) : (
       <div>
-      <h1><span>Expense Tracker</span><button className='signout' onClick={handleSignOut} style={{
-        display:'flex',
-        float:'right',
-        marginTop:'0.8%',
-        backgroundColor: '#f44336',
-        color: '#ffffff',
-        padding: '6px 10px',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer',
-      }} >Sign out</button></h1>
+      <nav class="navbar-container">
+        <div class="logo-container">
+            <a href="">Expense Tracker</a>
+        </div>
+
+        <div class="bars" onClick={handleNavbar()}>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <ul class="nav-items">
+            <li class="nav-link"><a href="#">Home</a></li>
+            <li class="nav-link"><a href="#">Service</a></li>
+            <li class="nav-link"><a href="#">Settings</a></li>
+            <div class="login-register">
+                <a href="#" class="signout button" onClick={handleSignOut}>Sign out</a>
+            </div>
+        </ul>
+      </nav>
       <div class={showLogin?"no-container":"container"}>
 
         <Grid container spacing={10}>
 
           <Grid item xs={12} sm={6} style={{marginTop:'2%'}}>
-            <h1 style={{marginBottom:"20%"}}>Welcome, {username} !</h1>
+            <h1 style={{marginBottom:"20%"}}>Welcome {username} !</h1>
             <div class="header">
             <img src="https://i.ibb.co/jfScDTC/budget.png" alt="Expense Tracker"/>
               <div class="balance-container">
