@@ -8,6 +8,7 @@ import SignIn from './signIn';
 import UseShowLogin from './showLogin';
 import TabGroup from './tabGroup';
 import List from './history';
+import Loader from './components/loader';
 
 function App() {
   const [desc, setDesc] = useState("");
@@ -18,13 +19,15 @@ function App() {
   const [email,setEmail] = useState(null);
   const [password,setPassword] = useState(null);
   const [username,setUsername] = useState(null);
-  const [transactions,setTransactions] = useState(null);
-  const [delID,setDelID] = useState(null);
+  const [transactions,setTransactions] = useState([]);
   const {showLogin,setShowLogin} = UseShowLogin();
   const [user_id,setUser_id] = useState(null);
   const elementRef = useRef(null);
   const delay = ms => new Promise(res => setTimeout(res, ms));
   const [transactionType,setTransactionType] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [newUser,setNewUser] = useState(false);
+
 
   function addTransactions(){
     //Add transactions while initialization
@@ -37,149 +40,175 @@ function App() {
       // console.log(res.data);
       //add this data to UI
       setTransactions(res.data);
+      console.log(transactions);
     }).catch(err=>{
       console.log("got error",err);
     })
   }
 
   useEffect(() => {
-    console.log(transactionType);
-    // Update the income,expenses and balance using Account api    
-    // if(loginData!=null){
-    //   setIncome(loginData.income);
-    //   setExpenses(loginData.expenses);
-    //   setBalance(loginData.balance);
-    // }
-    const lastKey = localStorage.key(localStorage.length - 1);
-    if(lastKey!=null){
-      const lastValue = JSON.parse(localStorage.getItem(lastKey));
-      const local_id = lastValue[0];
-      const local_authKey = lastValue[1]; //password
-      if(document.querySelector(".active")!=null){
-        console.log("quick")
-        document.querySelector(".active").style.display='None';
-      }
-      setUser_id(local_id);
-      setEmail(lastKey);
-      setPassword(local_authKey);
+    if(newUser){
+      localStorage.clear();
+      localStorage.setItem('token',user_id);
     }
+    if(JSON.parse(localStorage.getItem('history'))!==null){
+      setTransactions(JSON.parse(localStorage.getItem('history')));
+    }
+    else{
+      if(typeof user_id!=='undefined' && user_id!==null && user_id!==-1){
+        console.log(user_id);
+        addTransactions();
+      }
+    }
+    if(isLoading){
+      document.querySelector('body').style.backgroundColor = '#212121';
+      document.querySelector('body').style.display = 'flex';
+    }
+
+    const token = localStorage.getItem('token');
+    setUser_id(token);
     if(user_id===-1){
       alert("Invalid credentials!");
     }
     else if(user_id!==null && user_id!==-1){
       setShowLogin(false);
       // Storing the token in localStorage
-      localStorage.setItem(email,JSON.stringify([user_id,password]));
-      addTransactions();
-    }
+      localStorage.setItem('token',user_id);
 
-    if(user_id!=null && user_id!==-1){
-      axios({
-        method : "GET",
-        headers:{ "Access-Control-Allow-Origin": "https://expense-tracker-backend-two.vercel.app/"},
-        params : {id: user_id},
-        url: `https://expense-tracker-backend-two.vercel.app/account`
-      }).then(res=>{
-        // console.log(res.data);
-        //add this data to UI
-        if(user_id!==-1){
-          setIncome(res.data.income);
-          setExpenses(res.data.expenses);
-          setBalance(res.data.balance);
-          setEmail(res.data.email);
-          setPassword(res.data.password);
-          setUsername(res.data.name);
-        }
-        // setTransactions(res.data);
-      }).catch(err=>{
-        console.log("got error",err);
-      })
-    }
+      // addTransactions();
 
-    // addTransactions();
-  },[user_id,income,expenses,balance,email]);
+      const delay = setTimeout(() => {
+        setIsLoading(false);
+        document.querySelector('body').style.backgroundColor = '#e5e6ed';
+        document.querySelector('body').style.display = 'block';
+      }, 2000); // Adjust the duration as needed
+      
+      if(localStorage.getItem('income')===null && localStorage.getItem('balance')===null && localStorage.getItem('expenses')===null){
+        axios({
+          method : "GET",
+          headers:{ "Access-Control-Allow-Origin": "https://expense-tracker-backend-two.vercel.app/"},
+          params : {id: user_id},
+          url: `https://expense-tracker-backend-two.vercel.app/account`
+        }).then(res=>{
+          //add this data to UI
+          if(user_id!==-1){
+            setIncome(parseFloat(String(res.data.income)).toFixed(2));
+            setExpenses(parseFloat(String(res.data.expenses)).toFixed(2));
+            setBalance(parseFloat(String(res.data.balance)).toFixed(2));
+            setEmail(res.data.email);
+            setPassword(res.data.password);
+            setUsername(res.data.name);
+            localStorage.setItem('username',res.data.name);
+          }        
+        }).catch(err=>{
+          console.log("got error",err);
+        })
+      }
+      else{
+        console.log('here')
+        setIncome(JSON.parse(localStorage.getItem('income')));
+        setBalance(JSON.parse(localStorage.getItem('balance')));
+        setExpenses(JSON.parse(localStorage.getItem('expenses')));
+        setUsername(localStorage.getItem('username'));
+      }
+    } 
+    return () => {
+      clearTimeout(delay);
+    };
+    
+  },[user_id,email]);
 
   let handleSubmit = async (e) => {
     e.preventDefault();
-    // if(transactionType===-1){
-    //   setAmount(amount*(-1));
-    // }
-    // await delay(1000);
-    try {
-      axios.post(
-            "https://expense-tracker-backend-two.vercel.app/post/",
-            { description: desc , amount: (amount*transactionType), user_id: user_id }
-        )
-        .then((res) => console.log("success, dictionary sent,", res))
-        .catch((err) => {
-            console.log(err.response);
-        });
-    } catch (err) {
-      console.log(err);
-    }
-    await delay(1600);
-    window.location.reload(true);
-    if(user_id!==null && user_id!==-1){
-      axios({
-        method :"GET",
-        params : {id: user_id},
-        headers:{ "Access-Control-Allow-Origin": "https://expense-tracker-backend-two.vercel.app/"},
-        url : `https://expense-tracker-backend-two.vercel.app/account`  
-        
-      }).then(res=>{
-      console.log('got account data',res.data);
-      }).catch(err=>{
-        console.log('error got',err);
-      })
+    const newItem = {description:desc,amount:amount*transactionType};
+    transactions.push(newItem);
 
-      axios({
-        method :"GET",
-        params : {id: user_id},
-        headers:{ "Access-Control-Allow-Origin": "https://expense-tracker-backend-two.vercel.app/"},
-        url : `https://expense-tracker-backend-two.vercel.app/transactions`  
-      }).then(res=>{
-        setTransactions(res.data);
-      }).catch(err=>{
-        console.log('error got',err);
-      })
-      addTransactions();
+    const i = parseFloat(String(income)).toFixed(2);
+    const b = parseFloat(String(balance)).toFixed(2);
+    const ex = parseFloat(String(expenses)).toFixed(2);
+    const n = parseFloat(String(newItem.amount)).toFixed(2);
+
+    localStorage.setItem('history',JSON.stringify(transactions));
+    if(newItem.amount>0){
+      setIncome((parseFloat(i)+parseFloat(n)).toFixed(2));
+      setBalance((parseFloat(b)+parseFloat(n)).toFixed(2));
+
+      localStorage.setItem('income',JSON.stringify((parseFloat(i)+parseFloat(n)).toFixed(2)));
+      localStorage.setItem('balance',JSON.stringify((parseFloat(b)+parseFloat(n)).toFixed(2)));
+      localStorage.setItem('expenses',JSON.stringify(parseFloat(ex).toFixed(2)));
     }
+    else{
+      setExpenses((parseFloat(ex)-parseFloat(n)).toFixed(2));
+      setBalance((parseFloat(b)+parseFloat(n)).toFixed(2));
+
+      localStorage.setItem('balance',JSON.stringify((parseFloat(b)+parseFloat(n)).toFixed(2)));
+      localStorage.setItem('expenses',JSON.stringify((parseFloat(ex)-parseFloat(n)).toFixed(2)));
+      localStorage.setItem('income',JSON.stringify(parseFloat(i).toFixed(2)));
+    }
+  };
+
+  const handleDelete = (index) => {
+    const amountToDel = transactions[index].amount;
+    transactions.splice(index, 1);
+    localStorage.setItem('history',JSON.stringify(transactions));
+
+    const i = parseFloat(String(income)).toFixed(2);
+    const b = parseFloat(String(balance)).toFixed(2);
+    const e = parseFloat(String(expenses)).toFixed(2);
+    const n = parseFloat(String(amountToDel)).toFixed(2);
+
+    if(amountToDel>0){      
+      setIncome((parseFloat(i)-parseFloat(n)).toFixed(2));
+      setBalance(parseFloat(b)-parseFloat(n).toFixed(2));
+
+      localStorage.setItem('income',(parseFloat(i)-parseFloat(n)).toFixed(2));
+      localStorage.setItem('balance',(parseFloat(b)-parseFloat(n)).toFixed(2));
+      localStorage.setItem('expenses',parseFloat(e).toFixed(2));
+    }
+    else{
+      setExpenses((parseFloat(e)+parseFloat(n)).toFixed(2));
+      setBalance((parseFloat(b)-parseFloat(n)).toFixed(2));
+
+      localStorage.setItem('income',parseFloat(i).toFixed(2));
+      localStorage.setItem('balance',(parseFloat(b)-parseFloat(n)).toFixed(2));
+      localStorage.setItem('expenses',(parseFloat(e)+parseFloat(n)).toFixed(2));
+    }    
   };
 
   useEffect(() => {
-    if (delID !== null) {
-      handleButtonClick();
+    if(localStorage.getItem('token')!==null && localStorage.getItem('history')!==null){
+      console.log("post")
+      //send data to backend and add to database
+      const data = {user_id:parseInt(localStorage.getItem('token')),income:localStorage.getItem('income'),balance:localStorage.getItem('balance'),expenses:localStorage.getItem('expenses'),transactions:JSON.parse(localStorage.getItem('history'))};
+      try {
+          axios.post(
+                "https://expense-tracker-backend-two.vercel.app/post/",
+                 data
+            )
+            .then((res) => console.log("success, data sent,", res))
+            .catch((err) => {
+                console.log(err.response);
+            });
+        } catch (err) {
+          console.log(err);
+        }
     }
-
-  }, [delID]);
-
-  const handleButtonClick = async() => {
-    try {
-      axios.post(
-            "https://expense-tracker-backend-two.vercel.app/delete/",
-            { id: delID, user_id: user_id}
-        )
-        .then((res) => console.log("success, delete ID sent,", res))
-        .catch((err) => {
-            console.log(err.response);
-        });
-    } catch (err) {
-      console.log(err);
-    }
-    await delay(1000);
-    console.log('Button ID:', delID);
-    window.location.reload(true);
-  };
+  }, []);
+  
 
   function handleSignOut(){
-    localStorage.clear();
+    localStorage.removeItem('token');
     window.location.reload(true);
   }
   
 
   return (
     <div className="App">
-      <SignIn status={[showLogin,setShowLogin,user_id,setUser_id,elementRef]}></SignIn>
+      <SignIn status={[showLogin,setShowLogin,user_id,setUser_id,elementRef,setNewUser]}></SignIn>
+      {isLoading ? (
+        <Loader></Loader> //loader
+      ) : (
+      <div>
       <h1><span>Expense Tracker</span><button className='signout' onClick={handleSignOut} style={{
         display:'flex',
         float:'right',
@@ -241,12 +270,22 @@ function App() {
       
       <div className= {showLogin?'no-history':'history'}>
         <h3>History</h3>
-        <List items={[transactions,setTransactions,delID,setDelID]}></List>
+        <ul id='list' className='list'>
+          {transactions.map((transaction, index) => (
+            <li className={transaction.amount<0 ? 'minus' : 'plus'} key={index}>
+              <span>{transaction.description}</span>
+              <span>{transaction.amount}</span>
+              <button class="delete-btn" onClick={function(e)  {e.preventDefault(); handleDelete(index)}} ><FontAwesomeIcon icon={faTrashCan} /></button>
+            </li>
+          ))}
+        </ul>
+
       </div>
 
       <div class="notification-container" id="notification">
         <p>Please add a description and amount</p>
       </div>
+      </div>)}
 
     </div>
   );

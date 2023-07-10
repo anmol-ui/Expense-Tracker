@@ -12,7 +12,9 @@ function SignIn(props){
     const [password,setPassword] = useState("");
     const [showSignup,setShowSignup] = useState(false);
 
-    function handleSubmit(){
+
+    let handleSubmit = async (e) => {
+        e.preventDefault();
         //some work
         // setShowLogin(false);
         if(email.length>4){
@@ -26,7 +28,7 @@ function SignIn(props){
                                   "https://expense-tracker-backend-two.vercel.app/register/",
                                   { username: username , email: email, password: password }
                               )
-                              .then((res) => props.status[3](res.data.id))
+                              .then((res) => {props.status[3](res.data.id); props.status[5](true); localStorage.setItem('username',username)})
                               .catch((err) => {
                                   console.log(err.response);
                               });
@@ -45,7 +47,7 @@ function SignIn(props){
                               "https://expense-tracker-backend-two.vercel.app/verify/",
                               { email: email, password: password }
                           )
-                          .then((res) => props.status[3](res.data.id))
+                          .then((res) => {props.status[3](res.data.id);})
                           .catch((err) => {
                               console.log(err.response);
                           });
@@ -78,14 +80,14 @@ function SignIn(props){
         <div ref={props.status[4]} className={props.status[0]?"active":"inactive"}>
             <div className='login-form'>
                 <div className='form-box solid'>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <h1 className='login-text'>{showSignup?'Register':'Sign In'}</h1>
-                        {showSignup ? <div><label>Name</label><input type='text' name='username' className='login-box' onChange={(e) => setUsername(e.target.value)} placeholder='Enter Full Name'></input></div>:""}
+                        {showSignup ? <div><label>Name</label><input type='text' name='username' className='login-box' onChange={(e) => {setUsername(e.target.value)}} placeholder='Enter Full Name'></input></div>:""}
                         <label>Email</label><br></br>
                         <input type='text' name='email' className='login-box' onChange={(e) => setEmail(e.target.value)} placeholder='abc@example.com'></input><br></br>
                         <lablel>Password</lablel><br></br>
                         <input type='password' name='password' className='login-box' onChange={(e) => setPassword(e.target.value)} ></input><br></br>
-                        <input type='submit' value={showSignup?"SIGN UP":"LOGIN"} className='login-btn' onClick={function (e) {e.preventDefault(); handleSubmit();}}></input>
+                        <input type='submit' value={showSignup?"SIGN UP":"LOGIN"} className='login-btn'></input>
                     </form>
                     <a style={{textDecoration:"None",marginTop:'5%',fontSize:'82%'}} href='' onClick={(e) => {e.preventDefault(); showSignup? setShowSignup(false) : setShowSignup(true);}}>{showSignup? "Already have an account? Sign In" :  "Don't have an account? Sign Up"}</a>
                 </div>
