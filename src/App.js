@@ -206,7 +206,7 @@ function App() {
     <div className="App">
       <SignIn status={[showLogin,setShowLogin,user_id,setUser_id,elementRef,setNewUser]}></SignIn>
       {isLoading ? (
-        <Loader></Loader> //loader
+        <Loader></Loader> //loader set
       ) : (
       <div>
       <h1><span>Expense Tracker</span><button className='signout' onClick={handleSignOut} style={{
