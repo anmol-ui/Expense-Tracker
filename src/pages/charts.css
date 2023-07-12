@@ -1,0 +1,176 @@
+.tradingview-widget-container, #tradingview {
+    height: 400px
+  }
+
+.chart{
+  margin-top: 3%;
+  display: inline-block;
+  justify-content: center;
+}
+body{
+  scroll-behavior: smooth;
+}
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@600;700&family=Poppins:wght@500&display=swap');
+
+.charts-root{
+  position: relative;
+  background-color: snow;
+}
+.charts-header{
+  position: absolute;
+  top: 14%;
+  left: 11%;
+  display: block;
+  text-align: left;
+  width: 38%;
+}
+.bgImage {
+  background-image: url('https://img.freepik.com/free-photo/business-infographics-hologram-made-by-man_23-2148755139.jpg?w=826&t=st=1689143556~exp=1689144156~hmac=0b522e082f5d6b8f8654103a004fb8257109a9f1720e1acb8945ea136c86d92f');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.8; /* Adjust the opacity value as per your preference */
+  height: 47rem;
+  filter: blur(4px);
+  position: relative;
+  left: -7px;
+  width: 100.7%;
+}
+
+.main-content{
+  margin-left: 5%;
+  margin-right: 5%;
+  text-align: center;
+}
+
+@media(max-width: 900px) {
+  .tv-lightweight-charts{
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+.charts-header a{
+  display: block;
+  position: relative;
+  overflow: hidden;
+  padding: 25px 30px;
+  font-weight: bold;
+  text-decoration: none;
+  letter-spacing: 4px;
+  color: #FFFF33;
+  transition: 0.5s;
+  border-radius: 2px;
+}
+
+.charts-header a:hover{
+  background: #FFFF33;
+  color: #050801;
+  box-shadow: 0 0 5px #FFFF33, 0 0 25px #FFFF33, 0 0 50px #FFFF33, 0 0 200px #FFFF33;
+  /* -webkit-box-reflect: below 1px linear-gradient(transparent, #0005); */
+  /* style for reflection */
+}
+
+.charts-header a span{
+  display: block;
+  position: absolute;
+}
+
+.charts-header a span:nth-child(1){
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FFFF33);
+  animation: span_1 1s linear infinite;
+}
+
+@keyframes span_1 {
+  0%{
+      left: -100%;
+  }
+  50%, 100%{
+      left: 100%;
+  }
+}
+
+.charts-header a span:nth-child(2){
+  top: 0%;
+  right: 0%;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, #FFFF33);
+  animation: span_2 1s linear 0.25s infinite;
+}
+
+@keyframes span_2 {
+  0%{
+      top: -100%;
+  }
+  50%, 100%{
+      top: 100%;
+  }
+}
+
+.charts-header a span:nth-child(3){
+  bottom: 0%;
+  right: 0%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(270deg, transparent, #FFFF33);
+  animation: span_3 1s linear 0.50s infinite;
+}
+
+@keyframes span_3 {
+  0%{
+      right: -100%;
+  }
+  50%, 100%{
+      right: 100%;
+  }
+}
+
+.charts-header a span:nth-child(4){
+  bottom: 0%;
+  left: 0%;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(360deg, transparent, #FFFF33);
+  animation: span_4 1s linear 0.75s infinite;
+}
+
+@keyframes span_4 {
+  0%{
+      bottom: -100%;
+  }
+  50%, 100%{
+      bottom: 100%;
+  }
+}
+
+.chart-content{
+  text-align: left;
+}
+.tab-label {
+  position: relative;
+  display: block;
+  line-height: 2.75em;
+  height: 2.5em;
+  padding: 0 1.618em;
+  background: #1abc9c;
+  border-bottom: 0.125rem solid #16a085;
+  color: #fff;
+  cursor: pointer;
+  top: 0;
+  transition: all 0.25s;
+}
+.tab-label:hover {
+  left: -0.45rem;
+  transition: left 0.25s;
+}
+
+.vertical-tabs{
+  width: 29%;
+  padding-top: 7%;
+  float: right;
+}

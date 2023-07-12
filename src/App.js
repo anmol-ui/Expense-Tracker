@@ -1,15 +1,16 @@
 import './App.css';
-import Grid from '@mui/material/Grid';
 import { useState,useEffect,useRef } from "react";
 import axios from "axios";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope,faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import SignIn from './signIn';
-import UseShowLogin from './showLogin';
-import TabGroup from './tabGroup';
 import List from './history';
 import Loader from './components/loader';
-
+import { dom } from '@fortawesome/fontawesome-svg-core';
+import Charts from './pages/charts';
+import Settings from './pages/settings';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Home from './pages/home';
+import UseShowLogin from './showLogin';
 
 function App() {
   const [desc, setDesc] = useState("");
@@ -21,23 +22,14 @@ function App() {
   const [password,setPassword] = useState(null);
   const [username,setUsername] = useState(null);
   const [transactions,setTransactions] = useState([]);
-  const {showLogin,setShowLogin} = UseShowLogin();
   const [user_id,setUser_id] = useState(null);
   const elementRef = useRef(null);
   const delay = ms => new Promise(res => setTimeout(res, ms));
-  const [transactionType,setTransactionType] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [newUser,setNewUser] = useState(false);
+  const [toggle,setToggle] = useState(false);
+  const {showLogin,setShowLogin} = UseShowLogin();
 
-
-  function handleNavbar(){
-    let bar = document.querySelector('.bars'), navItem = document.querySelector('.nav-items');
-    if(bar!==null){
-      bar.addEventListener('click', () => {
-          navItem.classList.toggle('nactive');
-      });
-    }
-  }
   function addTransactions(){
     //Add transactions while initialization
     axios({
@@ -49,7 +41,6 @@ function App() {
       // console.log(res.data);
       //add this data to UI
       setTransactions(res.data);
-      console.log(transactions);
     }).catch(err=>{
       console.log("got error",err);
     })
@@ -60,12 +51,11 @@ function App() {
       localStorage.clear();
       localStorage.setItem('token',user_id);
     }
-    if(JSON.parse(localStorage.getItem('history'))!==null){
+    if(localStorage.getItem('token')!==null && JSON.parse(localStorage.getItem('history'))!==null){
       setTransactions(JSON.parse(localStorage.getItem('history')));
     }
     else{
       if(typeof user_id!=='undefined' && user_id!==null && user_id!==-1){
-        console.log(user_id);
         addTransactions();
       }
     }
@@ -76,11 +66,13 @@ function App() {
 
     const token = localStorage.getItem('token');
     setUser_id(token);
+    console.log(user_id);
     if(user_id===-1){
       alert("Invalid credentials!");
     }
     else if(user_id!==null && user_id!==-1){
       setShowLogin(false);
+      console.log(showLogin);
       // Storing the token in localStorage
       localStorage.setItem('token',user_id);
 
@@ -92,7 +84,7 @@ function App() {
         document.querySelector('body').style.display = 'block';
       }, 2000); // Adjust the duration as needed
       
-      if(localStorage.getItem('income')===null && localStorage.getItem('balance')===null && localStorage.getItem('expenses')===null){
+      if(localStorage.getItem('token')===null || localStorage.getItem('balance')===null){
         axios({
           method : "GET",
           headers:{ "Access-Control-Allow-Origin": "https://expense-tracker-backend-two.vercel.app/"},
@@ -127,63 +119,6 @@ function App() {
     
   },[user_id,email]);
 
-  let handleSubmit = async (e) => {
-    e.preventDefault();
-    const newItem = {description:desc,amount:amount*transactionType};
-    transactions.push(newItem);
-
-    const i = parseFloat(String(income)).toFixed(2);
-    const b = parseFloat(String(balance)).toFixed(2);
-    const ex = parseFloat(String(expenses)).toFixed(2);
-    const n = parseFloat(String(newItem.amount)).toFixed(2);
-
-    localStorage.setItem('history',JSON.stringify(transactions));
-    if(newItem.amount>0){
-      setIncome((parseFloat(i)+parseFloat(n)).toFixed(2));
-      setBalance((parseFloat(b)+parseFloat(n)).toFixed(2));
-
-      localStorage.setItem('income',JSON.stringify((parseFloat(i)+parseFloat(n)).toFixed(2)));
-      localStorage.setItem('balance',JSON.stringify((parseFloat(b)+parseFloat(n)).toFixed(2)));
-      localStorage.setItem('expenses',JSON.stringify(parseFloat(ex).toFixed(2)));
-    }
-    else{
-      setExpenses((parseFloat(ex)-parseFloat(n)).toFixed(2));
-      setBalance((parseFloat(b)+parseFloat(n)).toFixed(2));
-
-      localStorage.setItem('balance',JSON.stringify((parseFloat(b)+parseFloat(n)).toFixed(2)));
-      localStorage.setItem('expenses',JSON.stringify((parseFloat(ex)-parseFloat(n)).toFixed(2)));
-      localStorage.setItem('income',JSON.stringify(parseFloat(i).toFixed(2)));
-    }
-  };
-
-  const handleDelete = (index) => {
-    const amountToDel = transactions[index].amount;
-    transactions.splice(index, 1);
-    localStorage.setItem('history',JSON.stringify(transactions));
-
-    const i = parseFloat(String(income)).toFixed(2);
-    const b = parseFloat(String(balance)).toFixed(2);
-    const e = parseFloat(String(expenses)).toFixed(2);
-    const n = parseFloat(String(amountToDel)).toFixed(2);
-
-    if(amountToDel>0){      
-      setIncome((parseFloat(i)-parseFloat(n)).toFixed(2));
-      setBalance(parseFloat(b)-parseFloat(n).toFixed(2));
-
-      localStorage.setItem('income',(parseFloat(i)-parseFloat(n)).toFixed(2));
-      localStorage.setItem('balance',(parseFloat(b)-parseFloat(n)).toFixed(2));
-      localStorage.setItem('expenses',parseFloat(e).toFixed(2));
-    }
-    else{
-      setExpenses((parseFloat(e)+parseFloat(n)).toFixed(2));
-      setBalance((parseFloat(b)-parseFloat(n)).toFixed(2));
-
-      localStorage.setItem('income',parseFloat(i).toFixed(2));
-      localStorage.setItem('balance',(parseFloat(b)-parseFloat(n)).toFixed(2));
-      localStorage.setItem('expenses',(parseFloat(e)+parseFloat(n)).toFixed(2));
-    }    
-  };
-
   useEffect(() => {
     if(localStorage.getItem('token')!==null && localStorage.getItem('history')!==null){
       console.log("post")
@@ -201,6 +136,7 @@ function App() {
         } catch (err) {
           console.log(err);
         }
+        
     }
   }, []);
   
@@ -213,6 +149,11 @@ function App() {
 
   return (
     <div className="App">
+        <Routes>
+          <Route path="/home" element={<Home data={[username,balance,income,expenses,transactions,desc,amount,showLogin,isLoading]} func={[setBalance,setIncome,setExpenses,setDesc,setAmount]}></Home>} />
+          <Route path="/services" element={<Charts></Charts>} />
+          <Route path="/contact" element={<Settings></Settings>} />
+        </Routes>
       <SignIn status={[showLogin,setShowLogin,user_id,setUser_id,elementRef,setNewUser]}></SignIn>
       {isLoading ? (
         <Loader></Loader> //loader set
@@ -223,86 +164,32 @@ function App() {
             <a href="">Expense Tracker</a>
         </div>
 
-        <div class="bars" onClick={handleNavbar()}>
+        <div className="bars" onClick={()=>{
+          if(toggle === true){
+            document.querySelector('.nav-items').style.top = '8%';
+            document.querySelector('.nav-items').style.right = '-105%';
+            setToggle(false);
+          }
+          else{
+            document.querySelector('.nav-items').style.top = '54px';
+            document.querySelector('.nav-items').style.right = '0';
+            setToggle(true);
+          }
+        }}>
             <div class="bar"></div>
             <div class="bar"></div>
             <div class="bar"></div>
         </div>
 
         <ul class="nav-items">
-            <li class="nav-link"><a href="#">Home</a></li>
-            <li class="nav-link"><a href="#">Service</a></li>
-            <li class="nav-link"><a href="#">Settings</a></li>
+            <li class="nav-link"><a href="#"><Link to="/home">Home</Link></a></li>
+            <li class="nav-link"><a href="#"><Link to="/services">Services</Link></a></li>
+            <li class="nav-link"><a href="#"><Link to="/settings">Settings</Link></a></li>
             <div class="login-register">
                 <a href="#" class="signout button" onClick={handleSignOut}>Sign out</a>
             </div>
         </ul>
       </nav>
-      <div class={showLogin?"no-container":"container"}>
-
-        <Grid container spacing={10}>
-
-          <Grid item xs={12} sm={6} style={{marginTop:'2%'}}>
-            <h1 style={{marginBottom:"20%"}}>Welcome {username} !</h1>
-            <div class="header">
-            <img src="https://i.ibb.co/jfScDTC/budget.png" alt="Expense Tracker"/>
-              <div class="balance-container">
-                <h2>Your Balance</h2>
-                <h2 id="balance" class="balance">₹{balance}</h2>
-              </div>
-            </div>
-            <div class="inc-exp-container">
-              <div>
-                <h4>Income</h4>
-                <p id="money-plus" class="money plus">+₹{income}</p>
-              </div>
-              <div>
-                <h4>Expenses</h4>
-                <p id="money-minus" class="money minus">-₹{expenses}</p>
-              </div>
-            </div>
-            
-          </Grid>
-
-          <Grid item xs={12} sm={6} style={{marginTop:'3%'}}>
-            <h3>Add new transaction</h3>
-            <form id="form" onSubmit={handleSubmit}>
-              <label>Transaction type</label>
-              <TabGroup type={[transactionType,setTransactionType]}></TabGroup>
-              <div class="form-control">
-                <label for="text">Description</label>
-                <input type="text" value={desc} id="text" onChange={(e) => setDesc(e.target.value)} placeholder="Enter description..." />
-              </div>
-              <div class="form-control">
-                <label for="amount">Amount <br/>
-                </label>
-                <input type="number" value={amount} id="amount" onChange={(e) => setAmount(e.target.value)} placeholder="Enter amount..." />
-              </div>
-              <button class="btn">Add transaction</button>
-            </form>
-          </Grid>
-
-        </Grid>
-
-      </div>
-      
-      <div className= {showLogin?'no-history':'history'}>
-        <h3>History</h3>
-        <ul id='list' className='list'>
-          {transactions.map((transaction, index) => (
-            <li className={transaction.amount<0 ? 'minus' : 'plus'} key={index}>
-              <span>{transaction.description}</span>
-              <span>{transaction.amount}</span>
-              <button class="delete-btn" onClick={function(e)  {e.preventDefault(); handleDelete(index)}} ><FontAwesomeIcon icon={faTrashCan} /></button>
-            </li>
-          ))}
-        </ul>
-
-      </div>
-
-      <div class="notification-container" id="notification">
-        <p>Please add a description and amount</p>
-      </div>
       </div>)}
 
     </div>
