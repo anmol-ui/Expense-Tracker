@@ -118,7 +118,7 @@ function Charts(){
             <hr style={{borderTopWidth:'6px', maxWidth:'4rem',borderRadius:'50px'}}></hr>
             <Grid container spacing={10}>
 
-            <Grid item xs={6} sm={6} style={{marginTop:'2%'}}>
+            <Grid item xs={12} sm={6} style={{marginTop:'2%'}}>
               <div className="chart-content">
               <h2>{stocks[index]} (BSE)</h2>
               {activeTab!==null && <div className="chart" ref={chartContainerRef} />}
@@ -126,11 +126,11 @@ function Charts(){
               </div>
             </Grid>
 
-            <Grid item xs={6} sm={6} style={{marginTop:'2%'}}>
+            <Grid className="grid-bottom" item xs={12} sm={6} style={{marginTop:'2%'}}>
             <div className="vertical-tabs">
             <div className="tabs">
               {symbols.map((symbol,index)=>(
-                <div
+                <div className="stock"
                   onClick = {()=> {handleTabClick(symbol); setIndex(index)}}
                   key={index}
                 ><span className="tab-label">{stocks[index]}</span>

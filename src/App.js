@@ -150,6 +150,7 @@ function App() {
   return (
     <div className="App">
         <Routes>
+          <Route path="/" element={<Home data={[username,balance,income,expenses,transactions,desc,amount,showLogin,isLoading]} func={[setBalance,setIncome,setExpenses,setDesc,setAmount]}></Home>} />
           <Route path="/home" element={<Home data={[username,balance,income,expenses,transactions,desc,amount,showLogin,isLoading]} func={[setBalance,setIncome,setExpenses,setDesc,setAmount]}></Home>} />
           <Route path="/services" element={<Charts></Charts>} />
           <Route path="/contact" element={<Settings></Settings>} />
