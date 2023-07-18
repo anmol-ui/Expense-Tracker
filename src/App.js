@@ -4,13 +4,16 @@ import axios from "axios";
 import SignIn from './signIn';
 import List from './history';
 import Loader from './components/loader';
-import { dom } from '@fortawesome/fontawesome-svg-core';
 import Charts from './pages/charts';
 import Settings from './pages/settings';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Home from './pages/home';
 import UseShowLogin from './showLogin';
+import Footer from './components/footer';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowDown,faCaretDown } from '@fortawesome/free-solid-svg-icons';
+
 
 function App() {
   const [desc, setDesc] = useState("");
@@ -29,7 +32,11 @@ function App() {
   const [newUser,setNewUser] = useState(false);
   const [toggle,setToggle] = useState(false);
   const {showLogin,setShowLogin} = UseShowLogin();
+  const [isOpen,setIsOpen] = useState(false);
 
+  const services = ['Stocks','Cryptocurrency','Mutual Funds']
+  const services_url = ['stocks','crypto','mfs']
+  
   function addTransactions(){
     //Add transactions while initialization
     axios({
@@ -119,41 +126,38 @@ function App() {
     
   },[user_id,email]);
 
-  useEffect(() => {
-    if(localStorage.getItem('token')!==null && localStorage.getItem('history')!==null){
-      console.log("post")
-      //send data to backend and add to database
-      const data = {user_id:parseInt(localStorage.getItem('token')),income:localStorage.getItem('income'),balance:localStorage.getItem('balance'),expenses:localStorage.getItem('expenses'),transactions:JSON.parse(localStorage.getItem('history'))};
-      try {
-          axios.post(
-                "https://expense-tracker-backend-two.vercel.app/post/",
-                 data
-            )
-            .then((res) => console.log("success, data sent,", res))
-            .catch((err) => {
-                console.log(err.response);
-            });
-        } catch (err) {
-          console.log(err);
-        }
-        
-    }
-  }, []);
+  // useEffect(() => {
+  //   if(localStorage.getItem('token')!==null && localStorage.getItem('history')!==null){
+  //     console.log("post")
+  //     //send data to backend and add to database
+      
+  //   }
+  // }, []);
   
 
   function handleSignOut(){
     localStorage.removeItem('token');
     window.location.reload(true);
+    window.location.href = '/home';
   }
   
+  function handleDropDown(){
+    console.log('drop')
+    if(isOpen){
+      setIsOpen(false);
+    }
+    else{
+      setIsOpen(true);
+    }
+  };
 
   return (
     <div className="App">
         <Routes>
           <Route path="/" element={<Home data={[username,balance,income,expenses,transactions,desc,amount,showLogin,isLoading]} func={[setBalance,setIncome,setExpenses,setDesc,setAmount]}></Home>} />
           <Route path="/home" element={<Home data={[username,balance,income,expenses,transactions,desc,amount,showLogin,isLoading]} func={[setBalance,setIncome,setExpenses,setDesc,setAmount]}></Home>} />
-          <Route path="/services" element={<Charts></Charts>} />
-          <Route path="/contact" element={<Settings></Settings>} />
+          <Route path="/stocks" element={<Charts></Charts>} />
+          <Route path="/settings" element={<Settings></Settings>} />
         </Routes>
       <SignIn status={[showLogin,setShowLogin,user_id,setUser_id,elementRef,setNewUser]}></SignIn>
       {isLoading ? (
@@ -183,16 +187,22 @@ function App() {
         </div>
 
         <ul class="nav-items">
-            <li class="nav-link"><a href="#"><Link to="/home">Home</Link></a></li>
-            <li class="nav-link"><a href="#"><Link to="/services">Services</Link></a></li>
-            <li class="nav-link"><a href="#"><Link to="/settings">Settings</Link></a></li>
+            <li class="nav-link l1"><a href="#"><Link to="/home">Home</Link></a></li>
+            <li style={{width:'11%'}} id={isOpen ? "dropdown-active":"dropdown"} class="nav-link l2" onClick={handleDropDown}><a href="#"><span style={{marginRight:'7%'}}>Services</span><FontAwesomeIcon icon={faCaretDown} /> </a>
+            <div className='dropdown-items'>
+              {services.map((service,index)=>(
+                <div className='dropdown-item' key={index}><Link onMouseOver={(e)=>{e.target.style.color = 'black'}} onMouseOut={(e)=>{e.target.style.color = 'white'}}  to={"/"+services_url[index]}>{service}</Link></div>
+              ))}
+              </div>
+            </li>
+            <li id={isOpen ? "dropdown-active":"dropdown"} class="nav-link l3" onClick={handleDropDown}><a href="#"><Link to="/settings">Settings</Link></a></li>
             <div class="login-register">
                 <a href="#" class="signout button" onClick={handleSignOut}>Sign out</a>
             </div>
         </ul>
       </nav>
+      <Footer></Footer>
       </div>)}
-
     </div>
   );
 }

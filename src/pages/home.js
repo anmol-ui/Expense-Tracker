@@ -5,13 +5,25 @@ import UseShowLogin from '../showLogin';
 import TabGroup from '../tabGroup';
 import { useState,useEffect,useRef } from "react";
 import Loader from '../components/loader';
+import './home.css';
+import axios from "axios";
 
 function Home(props){
     const [transactionType,setTransactionType] = useState(1);
+    const [saveButton,setSaveButton] = useState({status:false,text:"Save",class:''});
+    const [popUp,setPopUp] = useState(false); 
 
     let handleSubmit = async (e) => {
         e.preventDefault();
-        const newItem = {description:props.data[5],amount:props.data[6]*transactionType};
+        let last_id;
+        if(localStorage.getItem('history')!==null){
+            last_id = (JSON.parse(localStorage.getItem('history'))[JSON.parse(localStorage.getItem('history')).length-1].id);
+        }
+        else{
+            // last_id = -1;
+            last_id = (props.data[4][props.data[4].length-1].id);
+        }
+        const newItem = {id:last_id+1,description:props.data[5],amount:props.data[6]*transactionType};
         props.data[4].push(newItem);
     
         const i = parseFloat(String(props.data[2])).toFixed(2);
@@ -36,9 +48,10 @@ function Home(props){
           localStorage.setItem('expenses',JSON.stringify((parseFloat(ex)-parseFloat(n)).toFixed(2)));
           localStorage.setItem('income',JSON.stringify(parseFloat(i).toFixed(2)));
         }
-        setTransactionType(1);
         props.func[4]("");
         props.func[3]("");
+
+        setSaveButton({status:false,text:"Save",class:''});
       };
     
       const handleDelete = async (index) => {
@@ -66,8 +79,33 @@ function Home(props){
           localStorage.setItem('income',parseFloat(i).toFixed(2));
           localStorage.setItem('balance',(parseFloat(b)-parseFloat(n)).toFixed(2));
           localStorage.setItem('expenses',(parseFloat(e)+parseFloat(n)).toFixed(2));
-        }    
+        } 
+        
+        setSaveButton({status:false,text:"Save",class:''});
       };
+    
+    function handleSave(){
+        
+        setSaveButton({status:true,text:String.fromCharCode('10003'),class:'checked'});
+        const data = {user_id:parseInt(localStorage.getItem('token')),income:localStorage.getItem('income'),balance:localStorage.getItem('balance'),expenses:localStorage.getItem('expenses'),transactions:JSON.parse(localStorage.getItem('history'))};
+        try {
+          axios.post(
+                "https://expense-tracker-backend-two.vercel.app/post",
+                 data
+            )
+            .then((res) => {console.log("success, data sent,", res)
+                setPopUp(true);
+                setTimeout(() => {
+                    setPopUp(false);
+                }, 3000);
+            })
+            .catch((err) => {
+                console.log(err.response);
+            });
+        } catch (err) {
+          console.log(err);
+        }
+    }
     
     return (
         <div>
@@ -136,9 +174,13 @@ function Home(props){
 
             </div>
 
-            <div class="notification-container" id="notification">
-                <p>Please add a description and amount</p>
+            <div className="row" style={{marginBottom:'3rem'}}>
+                <div className="col-12 text-center">
+                    <button className={`awesome-btn ` + saveButton.class} onClick={handleSave}>{saveButton.text}</button>
+                </div>
             </div>
+            {popUp?<div className="popup">Saved Successfully</div>:null}
+
         </div>)}
         </div>
     );

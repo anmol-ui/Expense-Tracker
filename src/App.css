@@ -508,3 +508,52 @@ input[type="password"] {
     font-size: 139%;
   }
 }
+
+.dropdown-items {
+  position: relative;
+  visibility: hidden;
+  opacity: 0;
+  max-height: 0px;
+  transition: max-height 0.6s ease;
+  margin-top: 2%;
+  font-size: 70%;
+ }
+
+ .dropdown-item {
+  cursor: pointer;
+  padding: 12% 0;
+  background-color: #176B87;
+}
+
+.dropdown-item:not(:last-child) {
+  border-bottom: 1px solid #fff;
+}
+.dropdown-item:hover {
+  color: black !important;
+   background: #fff;
+}
+
+#dropdown-active .dropdown-items {
+  z-index: 100;
+  visibility: visible;
+ 
+  border-top: 1px solid #fff;
+  /* height: auto; */
+  max-height: 290px;
+  opacity: 1;
+  transition: max-height 0.7s, opacity 3s, visibility 4s ease;
+ }
+
+.nav-link{
+  position: absolute;
+}
+.l1{
+  right: 39%;
+}
+.l2{
+  right: 26%;
+  top: 35%;
+}
+.l3{
+  right: 16%;
+}
