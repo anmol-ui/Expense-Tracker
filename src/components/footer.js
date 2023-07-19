@@ -1,12 +1,23 @@
 import './footer.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFacebook,faTwitter,faLinkedin,faGithub } from '@fortawesome/free-brands-svg-icons';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import About from '../pages/about';
+import Contact from './contact';
+import Blog from '../pages/blog';
+import Faq from '../pages/faq';
 
 function Footer(){
 
     return(
         <footer class="footer-distributed">
-
+			<Routes>
+				<Route path="/blog" element={<Blog></Blog>} />
+				<Route path="/about" element={<About></About>} />
+				<Route path="/faq" element={<Faq></Faq>} />
+				<Route path="/contact" element={<Contact></Contact>} />
+			</Routes>
 			<div class="footer-right">
 
 				<a href="#"><FontAwesomeIcon icon={faFacebook} /></a>
@@ -19,17 +30,17 @@ function Footer(){
 			<div class="footer-left">
 
 				<p class="footer-links">
-					<a style={{marginLeft:'0'}} class="link-1" href="#">Home</a>
+					<a style={{marginLeft:'0'}} class="link-1" href="/">Home</a>
 
-					<a href="#">Blog</a>
+					<Link to="/blog">Blog</Link>
 
-					<a href="#">Pricing</a>
+					<Link to="">Pricing</Link>
 
-					<a href="#">About</a>
+					<Link to="/about">About</Link>
 
-					<a href="#">Faq</a>
+					<Link to="/faq">Faq</Link>
 
-					<a href="#">Contact</a>
+					<Link to="/contact">Contact</Link>
 				</p>
 
 				<p>Expense Tracker &copy; 2022</p>

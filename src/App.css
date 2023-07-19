@@ -137,6 +137,17 @@ a {
 }
 
 @media(max-width: 700px) {
+  .nav-link{
+    position: static !important;
+  }
+  .l2{
+    width: 30% !important;
+    margin-left: 4% !important;
+  }
+  .dropdown-item{
+    background-color: #2590B5 !important;
+  }
+
   .navbar-container .nav-items {
       flex-direction: column;
       position: fixed;
@@ -435,7 +446,7 @@ input[type="number"] {
   font-size: 25px;
   margin-bottom: 20px;
 }
-.active input[type="text"],
+.login-form .active input[type="text"],
 input[type="password"] {
   height: 25px;
   border: 1px solid rgba(0, 0, 0, 0.2);

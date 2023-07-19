@@ -136,7 +136,7 @@ function App() {
   
 
   function handleSignOut(){
-    localStorage.removeItem('token');
+    localStorage.clear();
     window.location.reload(true);
     window.location.href = '/home';
   }

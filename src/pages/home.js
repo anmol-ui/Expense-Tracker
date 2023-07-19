@@ -21,7 +21,12 @@ function Home(props){
         }
         else{
             // last_id = -1;
-            last_id = (props.data[4][props.data[4].length-1].id);
+            if(props.data[4].length>0){
+                last_id = (props.data[4][props.data[4].length-1].id);
+            }
+            else{
+                last_id = -1;
+            }
         }
         const newItem = {id:last_id+1,description:props.data[5],amount:props.data[6]*transactionType};
         props.data[4].push(newItem);
@@ -175,8 +180,8 @@ function Home(props){
             </div>
 
             <div className="row" style={{marginBottom:'3rem'}}>
-                <div className="col-12 text-center">
-                    <button className={`awesome-btn ` + saveButton.class} onClick={handleSave}>{saveButton.text}</button>
+                <div className="col-12 text-center" style={{display:'flex',justifyContent:'center'}}>
+                    <button className="btn" style={{width:'6rem'}} onClick={handleSave}>{saveButton.text}</button>
                 </div>
             </div>
             {popUp?<div className="popup">Saved Successfully</div>:null}
