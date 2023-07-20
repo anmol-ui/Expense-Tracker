@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import About from '../pages/about';
 import Contact from './contact';
 import Blog from '../pages/blog';
-import Faq from '../pages/faq';
+import Faq from './faq';
 
 function Footer(){
 
@@ -23,7 +23,7 @@ function Footer(){
 				<a href="#"><FontAwesomeIcon icon={faFacebook} /></a>
 				<a href="#"><FontAwesomeIcon icon={faTwitter} /></a>
 				<a href="#"><FontAwesomeIcon icon={faLinkedin} /></a>
-				<a href="#"><FontAwesomeIcon icon={faGithub} /></a>
+				<a href="https://github.com/anmol-ui/Expense-Tracker" target="_blank"><FontAwesomeIcon icon={faGithub} /></a>
 
 			</div>
 

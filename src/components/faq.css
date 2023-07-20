@@ -1,0 +1,96 @@
+.faq #container{
+    font-family: 'roboto', sans-serif;
+    color: #666;
+    font-size: 16px;
+    background: #f9f9f9;
+    line-height: 1.6em;
+}
+
+.faq ul,.faq li { list-style: none; }
+
+.faq #container {
+  margin: 88px auto;
+  overflow: auto;
+}
+
+.faq h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.faq .title {
+  height: 40px;
+  background: #6bb170;
+  color: white;
+  text-align: center;
+  padding-top: 13px;
+}
+
+.faq li { padding: 20px; }
+
+.faq li.q {
+  background: #4FC2E;
+  font-weight: bold;
+  font-size: 120%;
+  border: 1px #ddd solid;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.faq li.a {
+  color: rgb(128, 121, 102) !important;
+  background: white;
+  max-height: 0;
+  overflow: hidden;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: max-height 0.5s ease, padding 0.5s ease;
+  color:#fff;
+}
+
+.faq li.q i {
+  float: right;
+  transition: transform 0.3s ease-in-out;
+}
+
+.faq li.q.rotate i::before {
+  content: "\f068"; /* Cross icon */
+}
+
+.faq li.q i::before {
+  content: "\f067"; /* Plus icon */
+}
+
+@media (max-width:800px) {
+  .faq #container { width: 90%; }
+}
+
+ul.faq{
+    padding-right: 40px;
+}
+
+.six span{
+    font-weight: 600;
+}
+
+@media (max-width:600px) {
+    #container { 
+        width: 100% !important; 
+    }
+    .footer-distributed{
+        padding-left: 19px;
+        padding-right: 19px;
+    }
+    .faq h1{
+        margin-bottom: 48px;
+    }
+    .faq ul{
+        margin-top: 3rem;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+  
