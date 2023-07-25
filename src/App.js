@@ -195,7 +195,7 @@ function App() {
               ))}
               </div>
             </li>
-            <li id={isOpen ? "dropdown-active":"dropdown"} class="nav-link l3" onClick={handleDropDown}><a href="#"><Link to="/settings">Settings</Link></a></li>
+            <li id={isOpen ? "dropdown-active":"dropdown"} class="nav-link l3"><a href="#"><Link to="/settings">Settings</Link></a></li>
             <div class="login-register">
                 <a href="#" class="signout button" onClick={handleSignOut}>Sign out</a>
             </div>

@@ -113,7 +113,7 @@ function Home(props){
     }
     
     return (
-        <div>
+        <div className='home'>
         {props.data[8] ? (
                 <div></div>
                 ) : (

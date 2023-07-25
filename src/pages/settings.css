@@ -1,0 +1,72 @@
+.settings{
+    margin-top:20px;
+    color: #4f4f43;
+    background: white;
+}
+.settings input{
+    width: 100%;
+    height: 33px;
+    margin-top: 8px;
+    padding: 3%;
+}
+.settings .container{
+    padding-left: 2.6%;
+    padding-right: 2.6%;
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+}
+.account-settings .user-profile {
+    margin: 0 0 1rem 0;
+    padding-bottom: 1rem;
+    text-align: center;
+}
+.account-settings .user-profile .user-avatar {
+    margin: 0 0 1rem 0;
+}
+.account-settings .user-profile .user-avatar img {
+    width: 105px;
+    height: 105px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    border-radius: 100px;
+}
+.account-settings .user-profile h5.user-name {
+    margin: 0 0 0.5rem 0;
+}
+.account-settings .user-profile h6.user-email {
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+.account-settings .sabout {
+    margin: 1rem 0 0 0;
+    font-size: 0.8rem;
+    text-align: center;
+}
+.card {
+    background-color: snow ;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 0;
+    margin-bottom: 1rem;
+}
+.settings .form-control {
+    border: 1px solid #596280;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    font-size: .825rem;
+    background: white;
+    color: black;
+}
+
+.settings .user-info{
+    text-align: left;
+    padding: 0 5%;
+    font-size: 1rem;
+}
+
+.settings .user-info i{
+    margin-right: 5%;
+}

@@ -20,6 +20,7 @@
     "axios": "^1.4.0",
     "babel-plugin-macros": "^3.1.0",
     "lightweight-charts": "^4.0.1",
+    "mdb-react-ui-kit": "^6.1.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-bootstrap": "^2.8.0",

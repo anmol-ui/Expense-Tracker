@@ -98,7 +98,7 @@ function Charts(){
         const fetchData = async () => {
           try {
             const response = await axios.get(
-                'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol='+activeTab+'&outputsize=full&apikey=3NC5FRPGCGU5YIV3'
+                'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol='+activeTab+'&outputsize=full&apikey=71NX0YU7F60S23IV'
                 );
             const data = formatData(response.data);
             if(typeof data[0] !== 'undefined'){
@@ -221,7 +221,7 @@ function Charts(){
               </div>
             </Grid>
 
-            <Grid className="grid-bottom" item xs={12} sm={6} style={{marginTop:'1%'}}>
+            <Grid className="grid-bottom" item xs={12} sm={6} style={{marginTop:'3%'}}>
             <div className="vertical-tabs">
             {/* <div className="tabs">
               {symbols.map((symbol,index)=>(

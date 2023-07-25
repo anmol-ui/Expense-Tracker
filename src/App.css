@@ -209,7 +209,7 @@ a {
   top: 54px;
 }
 
-.main {
+.home .main {
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -229,11 +229,11 @@ a {
   margin-left: 5%;
   margin-right: 5%;
 }
-h1 {
+.home h1 {
   font-size: 2rem;
 }
 
-h2 {
+.home h2 {
   font-size: 1.17rem;
 }
 
@@ -243,15 +243,15 @@ h2 {
   font-size: 2rem;
 }
 
-h3 {
+.home h3 {
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 10px;
   margin: 40px 0 10px;
   margin-top: 0 !important;
 }
 
-h2,
-h4 {
+.home h2,
+.home h4 {
   margin: 0;
   text-transform: uppercase;
 }
@@ -289,13 +289,13 @@ h4 {
   color: var(--minus-color);
 }
 
-label {
+.home label {
   display: inline-block;
   margin: 10px 0;
 }
 
-input[type="text"],
-input[type="number"] {
+.home input[type="text"],
+.home input[type="number"] {
   border: 1px solid var(--border-secondary-color);
   border-radius: 5px;
   display: block;
@@ -304,7 +304,7 @@ input[type="number"] {
   width: 100%;
 }
 
-.btn {
+.home .btn {
   cursor: pointer;
   background-color: var(--main-color);
   box-shadow: var(--box-shadow);
@@ -349,7 +349,7 @@ input[type="number"] {
   font-size: 1.8rem;
   font-weight: 600;
 }
-.mb-3{
+.home .mb-3{
   margin-top: 3%;
 }
 .delete-btn {
@@ -430,7 +430,7 @@ input[type="number"] {
   filter: blur(5px);
   pointer-events: none;
 }
-.container{
+.home .container{
   opacity: 1;
   filter: blur(0px);
   margin-top: 7rem;
@@ -447,7 +447,7 @@ input[type="number"] {
   margin-bottom: 20px;
 }
 .login-form .active input[type="text"],
-input[type="password"] {
+.home input[type="password"] {
   height: 25px;
   border: 1px solid rgba(0, 0, 0, 0.2);
 }

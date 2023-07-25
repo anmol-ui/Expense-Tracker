@@ -1,5 +1,6 @@
 import './faq.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import Paper from '@mui/material/Paper';
 
 function Faq(){
 
@@ -27,8 +28,9 @@ function Faq(){
     }
 
     return (
+        <Paper elevation={24}>
         <div className="faq">
-             <div id="container">
+             <div id="container" style={{borderRadius:'60px'}}>
                 <h1>Questions? We've got you covered.</h1>
                 <div class="title"><h3>General FAQs on Savings and Investments</h3></div>
                     <ul class="faq">
@@ -63,6 +65,7 @@ function Faq(){
                     </ul>
             </div>
         </div>
+        </Paper>
     );
 }
 
