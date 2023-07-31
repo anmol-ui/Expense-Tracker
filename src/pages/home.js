@@ -95,6 +95,7 @@ function Home(props){
         const data = {user_id:parseInt(localStorage.getItem('token')),income:localStorage.getItem('income'),balance:localStorage.getItem('balance'),expenses:localStorage.getItem('expenses'),transactions:JSON.parse(localStorage.getItem('history'))};
         try {
           axios.post(
+                // "http://localhost:4000/post",
                 "https://expense-tracker-backend-two.vercel.app/post",
                  data
             )

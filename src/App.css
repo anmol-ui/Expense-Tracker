@@ -233,9 +233,9 @@ a {
   font-size: 2rem;
 }
 
-.home h2 {
+/* .home h2 {
   font-size: 1.17rem;
-}
+} */
 
 .balance {
   letter-spacing: 1px;
@@ -301,6 +301,23 @@ a {
   display: block;
   font-size: 16px;
   padding: 10px;
+  width: 100%;
+}
+
+.form-box input[type="text"] {
+  border: 1px solid var(--border-secondary-color);
+  border-radius: 5px;
+  display: block;
+  font-size: 16px;
+  padding: 10px;
+  width: 100%;
+}
+.form-box input[type="password"]{
+  border: 1px solid var(--border-secondary-color);
+  border-radius: 5px;
+  display: block;
+  font-size: 16px;
+  padding: 4px;
   width: 100%;
 }
 
